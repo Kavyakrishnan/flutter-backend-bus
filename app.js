@@ -5,18 +5,40 @@ var{busmodel}=require('./Model/busmodel')
 var app=Express()
  app.use(Bodyparser.urlencoded({extended:true}))
  app.use(Bodyparser.json())
+ Mongoose.connect("mongodb+srv://kavya:12345@cluster0.2q4qp.mongodb.net/busflutterdb")
 
  app.get('/',(req,res)=>{
     res.send(" Welcome to my Bus nodejs")
 })
+app.get('/view',async(req,res)=>{
+    try{
+        var result=await busmodel.find()
+        res.send(result)
+    }
+    catch(error)
+    {
+        res.send(error)
+    }
+   
+})
 app.post('/bus',(req,res)=>{
     var Busobject=new busmodel(req.body)
-    res.json(Busobject)
+   Busobject.save((error)=>{
+    if(error){
+res.send({"status":error})
+    }
+    else{
+
+    res.send({"status":"success"})
+}
+   })
+          
+        })
+   
     
 
-})
 
 
-app.listen( process.env.PORT || 3000,(req,res)=>{
+app.listen( process.env.PORT || 80,(req,res)=>{
     console.log("server is running")
 })
