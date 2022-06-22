@@ -21,6 +21,38 @@ app.get('/view',async(req,res)=>{
     }
    
 })
+app.post('/delete',async(req,res)=>{
+    try{
+var result=await busmodel.findByIdAndDelete({"_id":req.body._id})
+
+res.send(result)
+    }
+    catch(error){
+        res.json({"status":"error"})
+
+    }
+
+})
+app.post('/edit',async(req,res)=>{
+    try{
+var result=await busmodel.findByIdAndUpdate({"_id":req.body._id},req.body)
+res.json(result)
+    }
+    catch(error){
+        res.json({"status":"error"})
+
+    }
+})
+app.post('/search',async(req,res)=>{
+    try{
+var result= await busmodel.find(req.body)
+res.json(result)
+    }
+    catch(error){
+        res.json({"status":"error"})
+
+    }
+})
 app.post('/bus',(req,res)=>{
     var Busobject=new busmodel(req.body)
    Busobject.save((error)=>{
